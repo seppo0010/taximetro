@@ -36,37 +36,57 @@ export default class Prepare extends Component {
       geolocationEnabled, geolocationError
     } = this.state
     return (
-      <div>
-        <label onClick={() => geolocationEnabled || this.enableGeolocation()}>
-          <input type="checkbox" checked={geolocationEnabled} disabled={true} />Geolocalización habilitada
+      <div class="container">
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+        <input class="custom-control-input" id="geolocation" type="checkbox" checked={geolocationEnabled} disabled={true} />
+        <label class="custom-control-label" for="geolocation" onClick={() => geolocationEnabled || this.enableGeolocation()}>
+          Geolocalización habilitada
           {"geolocation" in navigator || "Tu navegador no soporta geolocalización"}
           {geolocationError}
         </label>
-        <label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="tick-amount">
           Valor ficha
-          <input name="tick-amount" type="number" value={tickAmount} onChange={(event) => this.setState({tickAmount: event.target.value})} min="0" step="0.01" />
         </label>
-        <label>
+          <input class="form-control" id="tick-amount" name="tick-amount" type="number" value={tickAmount} onChange={(event) => this.setState({tickAmount: event.target.value})} min="0" step="0.01" />
+      </div>
+      <div class="form-group">
+        <label for="initial-amount">
           Bajada de bandera
-          <input name="initial-amount" type="number" value={initialAmount} onChange={(event) => this.setState({initialAmount: event.target.value})} min="0" step="0.01" />
         </label>
-        <label>
+          <input class="form-control" id="initial-amount" name="initial-amount" type="number" value={initialAmount} onChange={(event) => this.setState({initialAmount: event.target.value})} min="0" step="0.01" />
+      </div>
+      <div class="form-group">
+        <label for="tick-distance">
           Distancia ficha (metros)
-          <input name="tick-distance" type="number" value={tickDistance} onChange={(event) => this.setState({tickDistance: event.target.value})} min="1" step="1" />
         </label>
-        <label>
+          <input class="form-control" id="tick-distance" name="tick-distance" type="number" value={tickDistance} onChange={(event) => this.setState({tickDistance: event.target.value})} min="1" step="1" />
+      </div>
+      <div class="form-group">
+        <label for="tick-time">
           Tiempo ficha (segundos)
-          <input name="tick-time" type="number" min="1" step="1" value={tickTime} onChange={(event) => this.setState({tickTime: event.target.value})} />
         </label>
-        <label>
+          <input class="form-control" id="tick-time" name="tick-time" type="number" min="1" step="1" value={tickTime} onChange={(event) => this.setState({tickTime: event.target.value})} />
+      </div>
+      <div class="form-group">
+        <label for="night-increase">
           Porcentaje de aumento nocturno
-          <input name="night-increase" type="number" value={nightIncrease} onChange={(event) => this.setState({nightIncrease: event.target.value})} min="0" />
         </label>
-        <label>
-          <input type="checkbox" name="is-night" value={isNight} onChange={(event) => this.setState({isNight: event.target.checked})} />
+          <input class="form-control" id="night-increase" name="night-increase" type="number" value={nightIncrease} onChange={(event) => this.setState({nightIncrease: event.target.value})} min="0" />
+      </div>
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" id="is-night" type="checkbox" name="is-night" value={isNight} onChange={(event) => this.setState({isNight: event.target.checked})} />
+        <label class="custom-control-label" for="is-night">
           Usar tarifa nocturna
         </label>
-        <button onClick={() => geolocationEnabled && this.props.onStart({
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-block" onClick={() => geolocationEnabled && this.props.onStart({
           tickAmount: parseFloat(tickAmount),
           initialAmount: parseFloat(initialAmount),
           tickDistance: parseInt(tickDistance, 10),
@@ -74,6 +94,7 @@ export default class Prepare extends Component {
           nightIncrease: parseFloat(nightIncrease),
           isNight: isNight,
         })}>Empezar</button>
+      </div>
       </div>
     );
   }
