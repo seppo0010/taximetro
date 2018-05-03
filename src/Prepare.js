@@ -24,35 +24,35 @@ export default class Prepare extends Component {
       <div>
         <label>
           Valor ficha
-          <input name="tick-amount" value={tickAmount} onChange={(event) => this.setState({tickAmount: event.target.value})} />
+          <input name="tick-amount" type="number" value={tickAmount} onChange={(event) => this.setState({tickAmount: event.target.value})} min="0" step="0.01" />
         </label>
         <label>
           Bajada de bandera
-          <input name="initial-amount" value={initialAmount} onChange={(event) => this.setState({initialAmount: event.target.value})} />
+          <input name="initial-amount" type="number" value={initialAmount} onChange={(event) => this.setState({initialAmount: event.target.value})} min="0" step="0.01" />
         </label>
         <label>
-          Distancia ficha
-          <input name="tick-distance" value={tickDistance} onChange={(event) => this.setState({tickDistance: event.target.value})} />
+          Distancia ficha (metros)
+          <input name="tick-distance" type="number" value={tickDistance} onChange={(event) => this.setState({tickDistance: event.target.value})} min="1" step="1" />
         </label>
         <label>
-          Tiempo ficha
-          <input name="tick-time" value={tickTime} onChange={(event) => this.setState({tickTime: event.target.value})} />
+          Tiempo ficha (segundos)
+          <input name="tick-time" type="number" min="1" step="1" value={tickTime} onChange={(event) => this.setState({tickTime: event.target.value})} />
         </label>
         <label>
           Porcentaje de aumento nocturno
-          <input name="night-increase" value={nightIncrease} onChange={(event) => this.setState({nightIncrease: event.target.value})} />
+          <input name="night-increase" type="number" value={nightIncrease} onChange={(event) => this.setState({nightIncrease: event.target.value})} min="0" />
         </label>
         <label>
           <input type="checkbox" name="is-night" value={isNight} onChange={(event) => this.setState({isNight: event.target.checked})} />
           Usar tarifa nocturna
         </label>
         <button onClick={() => this.props.onStart({
-          tickAmount,
-          initialAmount,
-          tickDistance,
-          tickTime,
-          nightIncrease,
-          isNight,
+          tickAmount: parseFloat(tickAmount),
+          initialAmount: parseFloat(initialAmount),
+          tickDistance: parseInt(tickDistance, 10),
+          tickTime: parseInt(tickTime, 10),
+          nightIncrease: parseFloat(nightIncrease),
+          isNight: isNight,
         })}>Empezar</button>
       </div>
     );

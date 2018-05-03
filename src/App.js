@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Prepare from './Prepare'
+import Taximeter from './Taximeter'
 
 class App extends Component {
   constructor() {
@@ -9,14 +10,15 @@ class App extends Component {
   }
 
   start(params) {
-    this.setState({started: true})
+    this.setState({started: true, taximeterParams: params})
   }
 
   render() {
-    const { started } = this.state
+    const { started, taximeterParams } = this.state
     return (
       <div>
         {!started && <Prepare onStart={this.start} />}
+        {started && <Taximeter params={taximeterParams} />}
       </div>
     );
   }
