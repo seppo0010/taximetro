@@ -14,7 +14,7 @@ export default class Prepare extends Component {
     super()
     const hour = new Date().getHours()
     this.state = Object.assign({
-      isNight: hour < 6 || hour > 22,
+      isNight: hour < 6 || hour >= 22,
       geolocationEnabled: false,
       geolocationError: '',
     }, defaultParameters)
