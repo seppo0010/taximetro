@@ -14,14 +14,34 @@ export default class Prepare extends Component {
     super()
     const hour = new Date().getHours()
     this.state = Object.assign({
-      isNight: hour < 6 || hour > 22
+      isNight: hour < 6 || hour > 22,
+      geolocationEnabled: false,
+      geolocationError: '',
     }, defaultParameters)
   }
 
+  enableGeolocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({
+        geolocationEnabled: true,
+      })
+    }, (err) => {
+      this.setState({geolocationError: err.message})
+    });
+  }
+
   render() {
-    const { tickAmount, initialAmount, tickDistance, tickTime, nightIncrease, isNight } = this.state
+    const {
+      tickAmount, initialAmount, tickDistance, tickTime, nightIncrease, isNight,
+      geolocationEnabled, geolocationError
+    } = this.state
     return (
       <div>
+        <label onClick={() => geolocationEnabled || this.enableGeolocation()}>
+          <input type="checkbox" checked={geolocationEnabled} disabled={true} />Geolocalización habilitada
+          {"geolocation" in navigator || "Tu navegador no soporta geolocalización"}
+          {geolocationError}
+        </label>
         <label>
           Valor ficha
           <input name="tick-amount" type="number" value={tickAmount} onChange={(event) => this.setState({tickAmount: event.target.value})} min="0" step="0.01" />
@@ -46,7 +66,7 @@ export default class Prepare extends Component {
           <input type="checkbox" name="is-night" value={isNight} onChange={(event) => this.setState({isNight: event.target.checked})} />
           Usar tarifa nocturna
         </label>
-        <button onClick={() => this.props.onStart({
+        <button onClick={() => geolocationEnabled && this.props.onStart({
           tickAmount: parseFloat(tickAmount),
           initialAmount: parseFloat(initialAmount),
           tickDistance: parseInt(tickDistance, 10),
