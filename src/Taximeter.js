@@ -76,8 +76,8 @@ export default class Taximeter extends Component {
     return (
       <div>
         Total: { formatter.format(total) }<br />
-        Tiempo transcurrido: { Math.floor(time / 60) }m<br />
-        Distancia transcurrida: { Math.floor(distance / 10) * 10 }m<br />
+        Tiempo: { Math.floor(time / 60) }m<br />
+        Distancia: { Math.floor(distance) }m<br />
       </div>
     );
   }
