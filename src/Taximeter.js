@@ -43,6 +43,11 @@ export default class Taximeter extends Component {
         })
       }
       this.setState({lastLocation: position.coords})
+    }, (err) => {
+      alert(err.message)
+    }, {
+      enableHighAccuracy: true,
+      maximumAge: 0,
     });
   }
 
