@@ -24,23 +24,44 @@ export default class Taximeter extends Component {
       time: 0,
       lastLocation: null,
       distance: 0,
+      ticks: 0,
+      tickDistance: 0,
+      tickStartDate: new Date(),
     }
   }
 
+  addTick(many) {
+    this.setState({
+      ticks: this.state.ticks + many,
+      tickDistance: 0,
+      tickStartDate: new Date(),
+    })
+  }
   componentDidMount() {
-    this.timer = setInterval(() => this.setState({
-      time: (new Date() - this.state.startDate) / 1000,
-    }), 1000)
+    this.timer = setInterval(() => {
+      const tickTime = (new Date() - this.state.tickStartDate) / 1000
+      if (tickTime >= this.props.params.tickTime) {
+        this.addTick(Math.floor(tickTime / this.props.params.tickTime))
+      }
+      this.setState({
+        time: (new Date() - this.state.startDate) / 1000,
+      })
+    }, 1000)
     this.watcher = navigator.geolocation.watchPosition((position) => {
       if (this.state.lastLocation) {
+        const addDistance = distance(
+          position.coords.longitude,
+          position.coords.latitude,
+          this.state.lastLocation.longitude,
+          this.state.lastLocation.latitude
+        )
         this.setState({
-          distance: this.state.distance + distance(
-            position.coords.longitude,
-            position.coords.latitude,
-            this.state.lastLocation.longitude,
-            this.state.lastLocation.latitude
-          )
+          tickDistance: this.state.tickDistance + addDistance,
+          distance: this.state.distance + addDistance,
         })
+        if (this.state.tickDistance >= this.props.params.tickDistance) {
+          this.addTick(Math.floor(this.state.tickDistance / this.props.params.tickDistance))
+        }
       }
       this.setState({lastLocation: position.coords})
     }, (err) => {
@@ -63,14 +84,9 @@ export default class Taximeter extends Component {
   }
 
   render() {
-    const { time, distance } = this.state
+    const { time, distance, ticks } = this.state
     const { params } = this.props
-    const total = (
-      params.initialAmount +
-      params.tickAmount * (
-        Math.floor(time / params.tickTime) +
-        Math.floor(distance / params.tickDistance)
-      )
+    const total = (params.initialAmount + params.tickAmount * ticks
     ) * (params.isNight ? (1 + params.nightIncrease / 100) : 1)
     const formatter = new Intl.NumberFormat('es-AR', {style: 'currency', currency: 'ARS'})
     return (
